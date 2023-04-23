@@ -1,90 +1,41 @@
+import { Button } from '@/UI/Button'
+import { Chivo_Mono } from 'next/font/google'
 import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
+import { env } from 'process'
+import { use } from 'react'
 
-const inter = Inter({ subsets: ['latin'] })
+const ChivoMono = Chivo_Mono({
+  weight: '900',
+  subsets: ['latin'],
+})
+
+async function getFood(params: string, categoryId?: string) {
+  const categoryID = categoryId ? categoryId : '10'
+  const rakutenRecip = `
+  https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId=${categoryID}&applicationId=${env.APP_UD}`
+  const res = await fetch(rakutenRecip)
+  return res.json()
+}
 
 export default function Home() {
+  const foods = use(getFood('aaa', '20'))
+
+  console.log(foods)
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
+    <main className={ChivoMono.className}>
+      <div className="flex justify-center">
+        <Image src="/people.png" alt="aaa" width="200" height="200" />
+      </div>
+      <div className="flex justify-center">
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+          <p>今日のお酒のつまみ何にしようかな、、、</p>
+          <p>そうだ、randomSnackShotを使ってみよう！</p>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="flex justify-center py-5">
+        <Button text="おまかせ" color="red" />
+        <Button text="鳥系" color="red" />
+        <Button text="さっぱり系" color="red" />
       </div>
     </main>
   )
